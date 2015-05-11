@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="file:/Users/cwulfman/git/iiif-schemas/iiif.rnc" type="application/relax-ng-compact-syntax"?>
+<manifest id="http://www.example.org/iiif/book1/manifest">
+    <label>Book 1</label>
+    <metadata>
+        <dataum label="Author">Anne Author</dataum>
+        <dataum label="Published">Paris, circa 1400</dataum>
+        <dataum label="Source">Some collection</dataum>
+    </metadata>
+    <description>
+        A longer description of this item.
+    </description>
+    <thumbnail uri="http://www.example.org/images/book1-page1/full/80,100/0/default.jpg">
+        <service id="http://www.example.org/images/book1-page1" 
+            context="http://iiif.io/api/image/2/context.json" 
+            profile="http://iiif.io/api/image/2/level1.json"/>
+    </thumbnail>
+    <logo uri="http://ourorg.org/logos/logo.png"></logo>
+    <attribution>Provided by Example Organization</attribution>
+    <license uri="http://ourorg.org/license.html"/>
+        <viewingDirection>right-to-left</viewingDirection>
+    <viewingHint>paged</viewingHint>
+    <related id="http://something">
+        <format>video/mpeg</format>
+    </related>
+    <service id="http://example.org/service/example" context="http://example.org/ns/jsonld/context.json" profile="http://example.org/docs/example-service.html"/>
+    <seeAlso>http://www.example.org/library/catalog/book1.xml</seeAlso>
+    <within>http://www.example.org/collections/books/</within>
+    <sequence id="http://www.example.org/iiif/book1/sequence/normal">
+        <label>current page order</label>
+        <viewingDirection>left-to-right</viewingDirection>
+        <viewingHint>paged</viewingHint>
+        <startCanvas>http://www.example.org/iiif/book1/canvas/p2</startCanvas>
+        <canvas id="http://www.example.org/iiif/book1/canvas/p1">
+            <label>p. 1</label>
+            <width>750</width>
+            <height>1000</height>
+            <image>
+                <motivation>sc:painting</motivation>
+                <resource id="http://www.example.org/iiif/book1/res/page1.jpg" type="dctypes:Image">
+                    <format>image/jpeg</format>
+                    <service context="http://iiif.io/api/image/2/context.json" id="http://www.example.org/images/book1-page1" profile="http://iiif.io/api/image/2/profiles/level2.json"></service>
+                    <width>1500</width>
+                    <height>2000</height>
+                </resource>
+                <on>http://www.example.org/iiif/book1/canvas/p1</on>
+            </image>
+            <otherContent>
+                <annotationList id="">
+                    <annotation>
+                        <motivation></motivation>
+                        <resource id="" type="">
+                            <format></format>
+                            <service context="" id="" profile=""></service>
+                            <width></width>
+                            <height></height>
+                        </resource>
+                        <on></on>
+                    </annotation>
+                </annotationList>
+            </otherContent>
+        </canvas>
+    </sequence>
+</manifest>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <ref name="element-manifest"/>
+  </start>
+  <define name="element-label">
+    <element name="label">
+      <text/>
+    </element>
+  </define>
+  <define name="element-metadata">
+    <element name="metadata">
+      <oneOrMore>
+        <ref name="element-datum"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element-datum">
+    <element name="dataum">
+      <attribute name="label"/>
+      <text/>
+    </element>
+  </define>
+  <define name="element-description">
+    <element name="description">
+      <text/>
+    </element>
+  </define>
+  <define name="common-image">
+    <attribute name="uri"/>
+    <optional>
+      <ref name="element-service"/>
+    </optional>
+  </define>
+  <define name="element-thumbnail">
+    <element name="thumbnail">
+      <ref name="common-image"/>
+    </element>
+  </define>
+  <define name="element-attribution">
+    <element name="attribution">
+      <text/>
+    </element>
+  </define>
+  <define name="element-logo">
+    <element name="logo">
+      <ref name="common-image"/>
+    </element>
+  </define>
+  <define name="element-license">
+    <element name="license">
+      <attribute name="uri"/>
+      <optional>
+        <attribute name="attribution"/>
+      </optional>
+    </element>
+  </define>
+  <define name="attribute-id">
+    <attribute name="id"/>
+  </define>
+  <define name="attribute-type">
+    <attribute name="type"/>
+  </define>
+  <define name="element-format">
+    <element name="format">
+      <text/>
+    </element>
+  </define>
+  <define name="element-height">
+    <element name="height">
+      <text/>
+    </element>
+  </define>
+  <define name="element-width">
+    <element name="width">
+      <text/>
+    </element>
+  </define>
+  <define name="element-viewingDirection">
+    <element name="viewingDirection">
+      <text/>
+    </element>
+  </define>
+  <define name="element-viewingHint">
+    <element name="viewingHint">
+      <text/>
+    </element>
+  </define>
+  <define name="element-related">
+    <element name="related">
+      <ref name="attribute-id"/>
+      <element name="format">
+        <text/>
+      </element>
+    </element>
+  </define>
+  <define name="element-service">
+    <element name="service">
+      <attribute name="context"/>
+      <ref name="attribute-id"/>
+      <attribute name="profile"/>
+    </element>
+  </define>
+  <define name="element-seeAlso">
+    <element name="seeAlso">
+      <text/>
+    </element>
+  </define>
+  <define name="element-within">
+    <element name="within">
+      <text/>
+    </element>
+  </define>
+  <define name="element-startCanvas">
+    <element name="startCanvas">
+      <text/>
+    </element>
+  </define>
+  <define name="element-manifest">
+    <element name="manifest">
+      <ref name="attribute-id"/>
+      <ref name="element-label"/>
+      <optional>
+        <ref name="element-metadata"/>
+      </optional>
+      <optional>
+        <ref name="element-description"/>
+      </optional>
+      <optional>
+        <ref name="element-thumbnail"/>
+      </optional>
+      <optional>
+        <ref name="element-logo"/>
+      </optional>
+      <optional>
+        <ref name="element-attribution"/>
+      </optional>
+      <optional>
+        <ref name="element-license"/>
+      </optional>
+      <optional>
+        <ref name="element-viewingDirection"/>
+      </optional>
+      <optional>
+        <ref name="element-viewingHint"/>
+      </optional>
+      <optional>
+        <ref name="element-service"/>
+      </optional>
+      <optional>
+        <ref name="element-seeAlso"/>
+      </optional>
+      <optional>
+        <ref name="element-within"/>
+      </optional>
+      <oneOrMore>
+        <ref name="element-sequence"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element-sequence">
+    <element name="sequence">
+      <ref name="attribute-id"/>
+      <optional>
+        <ref name="element-label"/>
+      </optional>
+      <ref name="element-viewingDirection"/>
+      <ref name="element-viewingHint"/>
+      <ref name="element-startCanvas"/>
+      <oneOrMore>
+        <ref name="element-canvas"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element-canvas">
+    <element name="canvas">
+      <ref name="attribute-id"/>
+      <ref name="element-label"/>
+      <ref name="element-width"/>
+      <ref name="element-height"/>
+      <oneOrMore>
+        <ref name="element-image"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="element-image">
+    <element name="image">
+      <ref name="annotation"/>
+    </element>
+  </define>
+  <define name="element-resource">
+    <element name="resource">
+      <ref name="attribute-id"/>
+      <ref name="attribute-type"/>
+      <ref name="element-format"/>
+      <ref name="element-service"/>
+      <ref name="element-width"/>
+      <ref name="element-height"/>
+    </element>
+  </define>
+  <define name="annotation">
+    <optional>
+      <ref name="attribute-id"/>
+    </optional>
+    <element name="motivation">
+      <text/>
+    </element>
+    <ref name="element-resource"/>
+    <element name="on">
+      <text/>
+    </element>
+  </define>
+  <define name="element-annotationList">
+    <element name="annotationList">
+      <ref name="attribute-id"/>
+      <oneOrMore>
+        <ref name="annotation"/>
+      </oneOrMore>
+    </element>
+  </define>
+</grammar>
