@@ -17,8 +17,30 @@ property-mdvalue =
     element value {
         attribute lang { text }?,
         attribute format { text }?,
-        text
+        (text | allowed-html-tags)
     }+
+    
+## Spec allows only a, b, br, i, img, p, and span tags
+allowed-html-tags =
+    element p {
+        mixed {
+            element a { attribute href { text }, text }*
+            & element b { text }*
+            & element br { empty }*
+            & element i { text }*
+            & element img { attribute src { text } }*
+        }
+    }
+    |
+    element span { 
+        mixed {
+            element a { attribute href { text }, text }*
+            & element b { text }*
+            & element br { empty }*
+            & element i { text }*
+            & element img { attribute src { text } }*
+        }
+    }
     
 property-description = element description { text }
 
@@ -42,6 +64,9 @@ property-id           = attribute id { xsd:anyURI }
 property-context      = attribute context { xsd:anyURI }
 property-profile      = attribute profile { xsd:anyURI }
 property-uri          = attribute uri { xsd:anyURI }
+
+## resource type is unnecessary in the XML model, 
+## as it is represented by the element name.
 property-resourceType = attribute type { 
     "sc:Collection"     |
     "sc:Manifest"       |  
@@ -52,7 +77,9 @@ property-resourceType = attribute type {
     "sc:Range"          |
     "sc:Layer"          |
     "sc:Content"        |
-    "oa:Annotation"
+    "oa:Annotation"     |
+    "dctypes:Image"     |
+    "dctypes:Sound"
     } 
 property-format           = attribute format { text }
 property-height           = attribute height { text }
@@ -68,7 +95,12 @@ property-viewingHint =
 
 # Linking Properties
 
-property-related = element related { text }
+property-related = 
+    element related { 
+        property-id
+        & property-format
+        & property-label
+    }
 property-service =
     element service {
         property-id,
@@ -81,11 +113,7 @@ property-seeAlso =
     }
 property-within =
     element within {
-        text | (
-         property-id,
-         property-resourceType,
-         property-label
-         )
+        text | resource-layer
     }
 property-startCanvas = attribute startCanvas { text }
 
@@ -99,25 +127,24 @@ property-resource =
     property-id
     & property-resourceType
     & property-format
-    & property-service
-    & property-height
-    & property-width
+    & property-service?
+    & property-height?
+    & property-width?
     }
 
 # Property Sets
 
 common-propertySet =
-    property-resourceType
-    & property-viewingHint?
-	& property-metadata?
+    property-viewingHint?
+	& property-metadata*
 	& property-description?
 	& property-thumbnail?
 	& property-attribution?
 	& property-license?
 	& property-logo?
-	& property-seeAlso?
+	& property-seeAlso*
 	& property-service?
-	& property-related?
+	& property-related*
 	& property-within*
 
 resource-collection-propertySet = 
@@ -126,13 +153,16 @@ resource-collection-propertySet =
 	& property-label
 	
 resource-manifest-propertySet =
-	common-propertySet
-	& property-id
+	property-id
+    & common-propertySet
+
+	& property-viewingDirection?
 	& property-label
 	
 resource-sequence-propertySet = 
 	common-propertySet
 	& property-id?
+	& property-viewingDirection?
 	& property-label?
 	& property-startCanvas?
 
@@ -157,12 +187,14 @@ resource-annotationList-propertySet =
 resource-range-propertySet = 
     common-propertySet
     & property-id
+	& property-viewingDirection?
     & property-label
     & property-startCanvas?
 
 resource-layer-propertySet = 
     common-propertySet
     & property-id
+	& property-viewingDirection?
     & property-label
 
 resource-content-propertySet =
@@ -201,6 +233,15 @@ resource-canvas =
         & resource-annotation+
         & resource-annotationList?
 	}
+	
+resource-canvas-part =
+    element canvas {
+        attribute ref { xsd:anyURI },
+        attribute x { xsd:int },
+        attribute y { xsd:int },
+        attribute w { xsd:int },
+        attribute h { xsd:int }
+}
 
 resource-annotation = 
     element annotation {
@@ -222,9 +263,12 @@ resource-annotationList =
 resource-range = 
     element range {
         resource-range-propertySet
-        & resource-sequence+
-        & resource-range*
+        & resource-canvas-part*
+        & resource-range-ref*
 	}
+	
+resource-range-ref =
+    element range { attribute ref { xsd:anyURI } }
 
 resource-layer = 
     element range {
