@@ -1,86 +1,247 @@
-start = element-manifest
-element-label = element label { text }
-element-metadata = element metadata { element-datum+ }
-element-datum =
-    element dataum {
-        (attribute label { text },
-         text)
-        | (attribute label { text },
-           element-datum)
+
+grammar {
+start = resource-manifest
+
+# Descriptive Properties
+property-label = attribute label { text }
+    
+property-metadata =
+    element metadata {
+        property-label,
+        property-mdvalue
     }
-element-description = element description { text }
-common-image =
-    attribute uri { text },
-    element-service?
-element-thumbnail = element thumbnail { common-image }
-element-attribution = element attribution { text }
-element-logo = element logo { common-image }
-element-license =
-    element license {
-        attribute uri { text },
-        attribute attribution { text }?
+    
+property-mdvalue =
+    attribute value { text }
+    |
+    element value {
+        attribute lang { text }?,
+        attribute format { text }?,
+        text
+    }+
+    
+property-description = element description { text }
+
+property-thumbnail =
+    element thumbnail {
+        property-id,
+        property-service
     }
-attribute-id = attribute id { text }
-attribute-type = attribute type { text }
-element-format = element format { text }
-element-height = element height { text }
-element-width = element width { text }
-element-viewingDirection = element viewingDirection { text }
-element-viewingHint = element viewingHint { text }
-element-related =
-    element related {
-        attribute-id,
-        element format { text }
+
+
+# Rights and Licensing Properties
+property-license = element license { property-uri }
+    
+property-attribution = element attribution { text }
+
+property-logo = element logo { property-uri }
+
+
+# Technical Properties   
+property-id           = attribute id { xsd:anyURI }
+property-context      = attribute context { xsd:anyURI }
+property-profile      = attribute profile { xsd:anyURI }
+property-uri          = attribute uri { xsd:anyURI }
+property-resourceType = attribute type { 
+    "sc:Collection"     |
+    "sc:Manifest"       |  
+    "sc:Sequence"       |
+    "sc:Canvas"         |
+    "sc:Annotation"     |
+    "sc:AnnotationList" |
+    "sc:Range"          |
+    "sc:Layer"          |
+    "sc:Content"        |
+    "oa:Annotation"
+    } 
+property-format           = attribute format { text }
+property-height           = attribute height { text }
+property-width            = attribute width  { text }
+property-viewingDirection =
+    attribute viewingDirection {
+        "left-to-right" | "right-to-left" | "top-to-bottom" | "bottom-to-top"
+    }    
+property-viewingHint =
+    attribute viewingHint {
+        "individuals" | "paged" | "continuous" | "non-paged" | "top"
     }
-element-service =
+
+# Linking Properties
+
+property-related = element related { text }
+property-service =
     element service {
-        attribute context { text },
-        attribute-id,
-        attribute profile { text }
+        property-id,
+        property-context,
+        property-profile
     }
-element-seeAlso = element seeAlso { text }
-element-within = element within { text }
-element-startCanvas = element startCanvas { text }
-element-resource =
+property-seeAlso =
+    element seeAlso {
+        attribute uri { text }
+    }
+property-within =
+    element within {
+        text | (
+         property-id,
+         property-resourceType,
+         property-label
+         )
+    }
+property-startCanvas = attribute startCanvas { text }
+
+# Open Annotation properties used in IIIF resources
+
+property-motivation = attribute motivation { text }
+property-on = attribute on { xsd:anyURI }
+
+property-resource = 
     element resource {
-        attribute-id, attribute-type, element-format, element-service, element-width, element-height
+    property-id
+    & property-resourceType
+    & property-format
+    & property-service
+    & property-height
+    & property-width
     }
-common-annotation =
-    attribute-id?,
-    element motivation { text },
-    element-resource,
-    element on { text }
-element-annotation = element annotation { common-annotation }
-element-annotationList = element annotationList { attribute-id, element-annotation+ }
-element-image = element image { common-annotation }
-element-manifest =
+
+# Property Sets
+
+common-propertySet =
+    property-resourceType
+    & property-viewingHint?
+	& property-metadata?
+	& property-description?
+	& property-thumbnail?
+	& property-attribution?
+	& property-license?
+	& property-logo?
+	& property-seeAlso?
+	& property-service?
+	& property-related?
+	& property-within*
+
+resource-collection-propertySet = 
+    common-propertySet
+    & property-id
+	& property-label
+	
+resource-manifest-propertySet =
+	common-propertySet
+	& property-id
+	& property-label
+	
+resource-sequence-propertySet = 
+	common-propertySet
+	& property-id?
+	& property-label?
+	& property-startCanvas?
+
+resource-canvas-propertySet = 
+	common-propertySet
+	& property-id
+	& property-height
+	& property-width
+	& property-label
+
+resource-annotation-propertySet = 
+	common-propertySet
+	& property-id?
+
+resource-annotationList-propertySet = 
+	common-propertySet
+	& property-id
+
+    
+# Additional Resource Types
+    
+resource-range-propertySet = 
+    common-propertySet
+    & property-id
+    & property-label
+    & property-startCanvas?
+
+resource-layer-propertySet = 
+    common-propertySet
+    & property-id
+    & property-label
+
+resource-content-propertySet =
+    common-propertySet
+    & property-id
+    & property-label?
+    
+ 
+    
+
+# Primary Resource Types
+
+resource-collection = 
+    element collection {
+        resource-collection-propertySet
+        & resource-collection*
+        & resource-manifest+
+	}
+	
+resource-manifest =
     element manifest {
-        attribute-id,
-        element-label,
-        element-metadata?,
-        element-description?,
-        element-thumbnail?,
-        element-logo?,
-        element-attribution?,
-        element-license?,
-        element-viewingDirection?,
-        element-viewingHint?,
-        element-related?,
-        element-service?,
-        element-seeAlso?,
-        element-within?,
-        element-sequence+
-    }
-element-sequence =
+        resource-manifest-propertySet
+        & resource-sequence+
+        & resource-range*
+	}
+	
+resource-sequence = 
     element sequence {
-        attribute-id,
-        element-label?,
-        element-viewingDirection,
-        element-viewingHint,
-        element-startCanvas,
-        element-canvas+
+        resource-sequence-propertySet
+        & resource-canvas+
+	}
+
+resource-canvas = 
+    element canvas {
+        resource-canvas-propertySet    
+        & resource-annotation+
+        & resource-annotationList?
+	}
+
+resource-annotation = 
+    element annotation {
+        resource-annotation-propertySet	
+        & property-motivation
+        & property-resource
+        & property-on
+	}
+
+resource-annotationList = 
+    element annotationList {
+        resource-annotationList-propertySet	
+        & resource-annotation+
+	}
+
+    
+# Additional Resource Types
+    
+resource-range = 
+    element range {
+        resource-range-propertySet
+        & resource-sequence+
+        & resource-range*
+	}
+
+resource-layer = 
+    element range {
+        resource-layer-propertySet
+        & resource-annotation+
     }
-element-canvas =
-    element canvas { attribute-id, element-label, element-width, element-height, element-image+,
-                     element otherContent { element-annotationList+ }?
+
+## An image resource is a kind of annotation.
+## It must have a motivation property whose value
+## must be "sc:painting". In addition, it has
+## format, height, and width properties
+resource-image_content =
+    element annotation {
+        resource-annotation-propertySet
+        & attribute motivation { "sc:painting" }
+        & property-format
+        & property-height
+        & property-width
     }
+}
