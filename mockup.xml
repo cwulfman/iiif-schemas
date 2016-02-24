@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest id="http://foo.bar/manifest"
-	  type="sc:Manifest"
 	  label="Book 1"
 	  viewingDirection="right-to-left"
 	  viewingHint="paged">
