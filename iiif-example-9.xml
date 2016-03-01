@@ -5,9 +5,7 @@
     described at https://www.w3.org/TR/xslt-30/#json-to-xml-mapping.
 -->
 
-<map xmlns="http://www.w3.org/2005/xpath-functions"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.w3.org/2005/xpath-functions file:/Users/cwulfman/repos/github/pulibrary/iiif-schemas/json.xsd">
+<map >
     
     <string key="@context">http://iiif.io/api/presentation/2/context.json</string>
     <string key="@type">sc:Manifest</string>
@@ -36,7 +34,7 @@
     </array>
     
     <string key="description">A longer description of this example book. It should give some real information.</string>
-    <string key="license">http://www.example.org/licence.html</string>
+    <string key="license">http://www.example.org/license.html</string>
     <string key="attribution">Provided by Example Organization</string>
     
     <map key="service">
@@ -61,11 +59,11 @@
             <string key="viewingHint">paged</string>
             <array key="canvases">
                 <map>
-                    <string key="@id">http://www.example.org/iiif/book1/canvas/p1</string>
+                   s <string key="@id">http://www.example.org/iiif/book1/canvas/p1</string>
                     <string key="@type">sc:Canvas</string>
                     <string key="label">p. 1</string>
-                    <string key="height">1000</string>
-                    <string key="width">750</string>
+                    <number key="height">1000</number>
+                    <number key="width">750</number>
                     <array key="images">
                         <map>
                             <string key="@type">oa:Annotation</string>
@@ -79,8 +77,8 @@
                                     <string key="@id">http://www.example.org/images/book1-page1</string>
                                     <string key="profile">http://iiif.io/api/image/2/level1.json</string>
                                 </map>
-                                <string key="height">2000</string>
-                                <string key="width">1500</string>
+                                <number key="height">2000</number>
+                                <number key="width">1500</number>
                             </map>
                             <string key="on">http://www.example.org/iiif/book1/canvas/p1</string>
                         </map>
@@ -96,8 +94,8 @@
                     <string key="@id">http://www.example.org/iiif/book1/canvas/p2</string>
                     <string key="@type">sc:Canvas</string>
                     <string key="label">p. 2</string>
-                    <string key="height">1000</string>
-                    <string key="width">750</string>
+                    <number key="height">1000</number>
+                    <number key="width">750</number>
                     <array key="images">
                         <map>
                             <string key="@type">oa:Annotation</string>
@@ -106,17 +104,17 @@
                                 <string key="@id">http://www.example.org/images/book1-page2/full/1500,2000/0/default.jpg</string>
                                 <string key="@type">dctypes:Image</string>
                                 <string key="format">image/jpeg</string>
-                                <string key="height">2000</string>
-                                <string key="width">1500</string>
+                                <number key="height">2000</number>
+                                <number key="width">1500</number>
                                 <map key="service">
                                     <string key="@context">http://iiif.io/api/image/2/context.json</string>
                                     <string key="@id">http://www.example.org/images/book1-page2</string>
                                     <string key="profile">http://iiif.io/api/image/2/level1.json</string>
-                                    <string key="height">8000</string>
-                                    <string key="width">6000</string>
+                                    <number key="height">8000</number>
+                                    <number key="width">6000</number>
                                     <array key="tiles">
                                         <map>
-                                            <string key="width">515</string>
+                                            <number key="width">512</number>
                                             <array key="scaleFactors">
                                                 <number>1</number>
                                                 <number>2</number>
@@ -142,8 +140,8 @@
                     <string key="@id">http://www.example.org/iiif/book1/canvas/p3</string>
                     <string key="@type">sc:Canvas</string>
                     <string key="label">p. 3</string>
-                    <string key="height">1000</string>
-                    <string key="width">750</string>
+                    <number key="height">1000</number>
+                    <number key="width">750</number>
                     <array key="images">
                         <map>
                             <string key="@type">oa:Annotation</string>
@@ -154,11 +152,11 @@
                                 <string key="format">image/jpeg</string>
                                 <map key="service">
                                     <string key="@context">http://iiif.io/api/image/2/context.json</string>
-                                    <string key="@id">http://www.example.org/images/book1-page3></string>
+                                    <string key="@id">http://www.example.org/images/book1-page3</string>
                                     <string key="profile">http://iiif.io/api/image/2/level1.json</string>
                                 </map>
-                                <string key="height">2000</string>
-                                <string key="width">1500</string>
+                                <number key="height">2000</number>
+                                <number key="width">1500</number>
                             </map>
                             <string key="on">http://www.example.org/iiif/book1/canvas/p3</string>
                         </map>
@@ -182,7 +180,7 @@
             <array key="canvases">
                 <string>http://www.example.org/iiif/book1/canvas/p1</string>
                 <string>http://www.example.org/iiif/book1/canvas/p2</string>
-                <string>http://www.example.org/iiif/book1/canvas/p2#xywh=0,0,750,300</string>
+                <string>http://www.example.org/iiif/book1/canvas/p3#xywh=0,0,750,300</string>
             </array>
         </map>
     </array>
