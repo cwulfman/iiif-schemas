@@ -1,0 +1,31 @@
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+
+grammar {
+
+start = element-map
+
+element-map =
+    element map {
+        attribute key { text }?
+        & element-string*
+        & element-number*
+        & element-boolean*
+        & element-array*
+        & element-map*
+    }
+element-string  = element string { attribute key { text }?, text }
+element-number  = element number { attribute key { text}? , xsd:integer }
+element-boolean = element boolean { attribute key { text }?, xsd:boolean }
+element-array   =
+    element array {
+        attribute key { text }?
+        & element-map*
+        & element-string*
+        & element-number*
+        & element-boolean*
+        & element-array*
+    }
+        
+
+
+}
