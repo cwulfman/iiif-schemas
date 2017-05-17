@@ -6,7 +6,9 @@
 	  viewingHint="paged">
 
   <!-- Descriptive metadata about the object/work -->
-  <metadata label="Author" value="Anne Author"/>
+  <metadata label="Author">
+    <value>Anne Author</value>
+  </metadata>
   <metadata label="Published">
     <value lang="en">Paris, circa 1400</value>
     <value lang="fr">Paris, environ 1400</value>

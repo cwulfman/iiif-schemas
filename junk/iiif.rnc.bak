@@ -1,0 +1,86 @@
+start = element-manifest
+element-label = element label { text }
+element-metadata = element metadata { element-datum+ }
+element-datum =
+    element dataum {
+        (attribute label { text },
+         text)
+        | (attribute label { text },
+           element-datum)
+    }
+element-description = element description { text }
+common-image =
+    attribute uri { text },
+    element-service?
+element-thumbnail = element thumbnail { common-image }
+element-attribution = element attribution { text }
+element-logo = element logo { common-image }
+element-license =
+    element license {
+        attribute uri { text },
+        attribute attribution { text }?
+    }
+attribute-id = attribute id { text }
+attribute-type = attribute type { text }
+element-format = element format { text }
+element-height = element height { text }
+element-width = element width { text }
+element-viewingDirection = element viewingDirection { text }
+element-viewingHint = element viewingHint { text }
+element-related =
+    element related {
+        attribute-id,
+        element format { text }
+    }
+element-service =
+    element service {
+        attribute context { text },
+        attribute-id,
+        attribute profile { text }
+    }
+element-seeAlso = element seeAlso { text }
+element-within = element within { text }
+element-startCanvas = element startCanvas { text }
+element-resource =
+    element resource {
+        attribute-id, attribute-type, element-format, element-service, element-width, element-height
+    }
+common-annotation =
+    attribute-id?,
+    element motivation { text },
+    element-resource,
+    element on { text }
+element-annotation = element annotation { common-annotation }
+element-annotationList = element annotationList { attribute-id, element-annotation+ }
+element-image = element image { common-annotation }
+element-manifest =
+    element manifest {
+        attribute-id,
+        element-label,
+        element-metadata?,
+        element-description?,
+        element-thumbnail?,
+        element-logo?,
+        element-attribution?,
+        element-license?,
+        element-viewingDirection?,
+        element-viewingHint?,
+        element-related?,
+        element-service?,
+        element-seeAlso?,
+        element-within?,
+        element-sequence+
+    }
+element-sequence =
+    element sequence {
+        attribute-id,
+        element-label?,
+        element-viewingDirection,
+        element-viewingHint,
+        element-startCanvas,
+        element-canvas+
+    }
+element-canvas =
+    element canvas { attribute-id, element-label, element-width, element-height, element-image+,
+                     element otherContent { element-annotationList+ }?
+    }

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- See https://github.com/doekman/xml2json-xslt  -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:local="http:/me.org"
+    exclude-result-prefixes="xs" version="2.0">
+    
+    <xsl:output indent="no" omit-xml-declaration="yes" method="text" encoding="UTF-8" media-type="text/x-json"/>
+    <xsl:strip-space elements="*"/>
+
+    <xsl:template match="/">
+        <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="manifest">
+        <xsl:text>{ </xsl:text>
+        <xsl:sequence select="local:prop-val-pair('@context', 'http://iiif.io/api/presentation/2/context.json')"/>
+        <xsl:text>, </xsl:text>
+        <xsl:sequence select="local:prop-val-pair('@type', 'sc:Manifest')"/>
+        <xsl:text>, </xsl:text>
+        <xsl:for-each select="@*">
+            <xsl:apply-templates select="." />
+            <xsl:text>,
+            </xsl:text>
+        </xsl:for-each>
+        <!-- Emit metadata properties -->
+        <xsl:text>"metadata" : [</xsl:text>
+        <xsl:for-each select="./metadata">
+            <xsl:apply-templates select="." />
+            <xsl:if test="position() &lt; last()">
+                <xsl:text>,
+            </xsl:text>
+            </xsl:if>
+
+        </xsl:for-each>
+        <xsl:text>]</xsl:text>
+        <xsl:text>,
+        </xsl:text>
+<!--        <xsl:apply-templates select="child::*" />-->
+        <xsl:text> }</xsl:text>
+    </xsl:template>
+    
+    <xsl:template match="metadata">
+        <xsl:choose>
+            <xsl:when test="@value" >
+                <xsl:sequence select="local:json-object(local:prop-val-pair(@label, @value))"></xsl:sequence>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="label">
+                    <xsl:value-of select="local:prop-val-pair('label', @label)"/>
+                </xsl:variable>
+                <xsl:text>"foo":"bar"</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        
+    </xsl:template>
+    
+    <xsl:function name="local:quote-string">
+        <xsl:param name="string"/>
+        <xsl:sequence select="concat('&quot;', local:escape-string($string), '&quot;')"/>
+    </xsl:function>
+    
+    <xsl:function name="local:escape-string">
+        <xsl:param name="string"/>
+        <xsl:variable name="sub1" select="replace($string, '\\', '\\\\')"/>
+        <xsl:sequence select="replace($sub1, '&quot;', '\\&quot;')"></xsl:sequence>
+    </xsl:function>
+
+    <xsl:function name="local:attr-to-json">
+        <xsl:param name="attr"/>
+        <xsl:variable name="prop" select="name($attr)" />
+        <xsl:variable name="val" select="$attr"/>
+        <xsl:value-of select="string-join((local:quote-string($prop), local:quote-string($val)), ':')"/>
+    </xsl:function>
+    
+    <xsl:function name="local:prop-val-pair">
+        <xsl:param name="prop"/>
+        <xsl:param name="val"/>
+        <xsl:sequence select="string-join((local:quote-string($prop), local:quote-string($val)), ':')"/>
+    </xsl:function>
+    
+    <xsl:function name="local:json-object">
+        <xsl:param name="pairs" />
+        <xsl:text>{</xsl:text>
+        <xsl:for-each select="$pairs">
+            <xsl:sequence select="current()"/>
+            <xsl:if test="position() &lt; last()">
+                <xsl:text>,</xsl:text>
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:text>}</xsl:text>        
+    </xsl:function>
+    
+    <xsl:template name="simple-element">
+        <xsl:param name="e"/>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="local:quote-string(name($e))"/>
+        <xsl:text> : </xsl:text>
+         
+        <xsl:value-of select="local:quote-string($e/text())"/>
+         
+        <xsl:text>}</xsl:text>
+    </xsl:template>
+    
+    <xsl:template match="node()/text()">
+        "foo"
+    </xsl:template>
+    
+    <xsl:template match="@*">
+        <xsl:sequence select="local:prop-val-pair(name(.), current())" />
+    </xsl:template>
+    
+    <xsl:template match="node()">
+        <xsl:call-template name="simple-element">
+            <xsl:with-param name="e" select="."></xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    
+    
+    
+
+</xsl:stylesheet>

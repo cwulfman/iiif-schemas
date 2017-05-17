@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest id="http://foo.bar/manifest"
+	  label="Book\ 11"
+	  viewingDirection="right-to-left"
+	  viewingHint="paged"
+	  xmlns:html="http://www.w3.org/1999/xhtml">
+  <metadata label="Author" value="Anne Author"/>
+  <metadata label="Published">
+    <value lang="en">Paris, circa 1400</value>
+    <value lang="fr">Paris, environ 1400</value>
+  </metadata>
+  <metadata label="Source">
+    <value format="text/html">
+      <!-- Can't handle this yet -->
+    </value>
+  </metadata>
+  <description>This is prose</description>
+  <thumbnail id="http://foo.org/default.jpg">
+    <service id="http://www.example.org/images/book1-page1"
+	     context="http://iiif.io/api/image/2/context.json"
+	     profile="http://iiif.io/api/image/2/level1.json"/>
+  </thumbnail>
+  <license uri="http://foo.bar"/>
+  <attribution>Provided by Example</attribution>
+  <logo uri="http://www.example.org/logos/inst.jpg"/>
+
+  <related id="http://foo.mpg"
+	   format="video/mpeg"
+	   label="video-book version"/>
+
+  <service id="http://example.org/service/example"
+	   context="http://example.org/ns/jsonld/context.json"
+	   profile="http://example.org/docs/example-service.html"/>
+
+  <seeAlso uri="http://foo/bar/book1.xml"/>
+  <within uri="http://library/collection/books"/>
+</manifest>

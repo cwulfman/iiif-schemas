@@ -1,0 +1,293 @@
+
+grammar {
+start = element-manifest
+
+# Descriptive Properties
+property-label = attribute label { text }
+    
+property-metadata =
+    element metadata {
+        property-label,
+        property-mdvalue
+    }
+    
+property-mdvalue =
+    attribute value { text }
+    |
+    element value {
+        attribute lang { text }?,
+        attribute format { text }?,
+        text
+    }+
+    
+property-description = element description { text }
+
+property-thumbnail =
+    element thumbnail {
+        property-id,
+        property-service
+    }
+
+
+# Rights and Licensing Properties
+property-license = element license { property-uri }
+    
+property-attribution = element attribution { text }
+
+property-logo = element logo { property-uri }
+
+
+# Technical Properties   
+property-id = attribute id { text }
+    
+property-context = attribute context { xsd:anyURI }
+property-profile = attribute profile { xsd:anyURI }
+property-uri = attribute uri { xsd:anyURI }
+    
+property-resourceType = attribute type { 
+    "sc:Collection"     |
+    "sc:Manifest"       |  
+    "sc:Sequence"       |
+    "sc:Canvas"         |
+    "sc:Annotation"     |
+    "sc:AnnotationList" |
+    "sc:Range"          |
+    "sc:Layer"          |
+    "sc:Content"
+    }
+    
+property-format = attribute format { text }
+
+property-height = attribute height { text }
+property-width  = attribute width  { text }
+
+property-viewingDirection =
+    attribute viewingDirection {
+        "left-to-right" | "right-to-left" | "top-to-bottom" | "bottom-to-top"
+    }
+    
+    
+property-viewingHint =
+    attribute viewingHint {
+        "individuals" | "paged" | "continuous" | "non-paged" | "top"
+    }
+
+# Linking Properties
+
+property-related = element related { text }
+
+property-service =
+    element service {
+        property-id,
+        property-context,
+        property-profile
+    }
+
+property-seeAlso =
+    element seeAlso {
+        attribute uri { text }
+    }
+
+property-within =
+    element within {
+        text | (
+         property-id,
+         property-resourceType,
+         property-label
+         )
+    }
+
+property-startCanvas = attribute startCanvas { text }
+
+
+# Primary Resource Types
+
+# TODO re-define the resource elements as resource-*, e.g., resource-manifest
+
+resource-manifest =
+    element manifest {
+	property-id
+	& property-resourceType
+	& property-viewingDirection?
+	& property-viewingHint?
+	& property-metadata?
+	& property-description?
+	& property-thumbnail?
+	& property-attribution?
+	& property-license?
+	& property-logo?
+	& property-seeAlso?
+	& property-service?
+	& property-related?
+	& property-within
+
+    & resource-sequence+
+    & resource-range*
+	}
+	
+resource-sequence = element sequence { text }
+
+resource-canvas = element canvas { text }
+
+resource-annotation = element annotation { text }
+
+resource-annotationList = element annotationList { text }
+    
+# Additional Resource Types
+    
+resource-range = element range { text }
+
+resource-layer = element layer { text }
+
+resource-collection = element collection { text }
+
+element-manifest =
+    element manifest {
+        property-id,
+        property-label,
+        attribute-viewingDirection?,
+        attribute-viewingHint?,
+        element-metadata+,
+        element-description?,
+        element-thumbnail?,
+        element-license?,
+        element-attribution?,
+        element-logo?,
+        element-related*,
+        element-service?,
+        element-seeAlso*,
+        element-within*,
+        element-sequence+,
+        element-range*
+    }
+    
+attribute-viewingHint =
+    attribute viewingHint {
+        "individuals" | "paged" | "continuous" | "non-paged" | "top"
+    }
+    
+attribute-viewingDirection =
+    attribute viewingDirection {
+        "left-to-right" | "right-to-left" | "top-to-bottom" | "bottom-to-top"
+    }
+    
+    
+common-properties =
+    attribute-viewingHint?,
+    element-attribution?,
+    element-license?,
+    element-logo?,
+    element-seeAlso?,
+    element-service?,
+    element-related?,
+    element-within
+
+element-metadata =
+    element metadata {
+        attribute label { text },
+        (attribute value { text }
+         | element-mdvalue+)
+    }
+
+    
+element-mdvalue =
+    element value {
+        attribute lang { text }?,
+        attribute format { text }?,
+        text
+    }
+element-description = element description { text }
+element-thumbnail =
+    element thumbnail {
+        attribute id { text },
+        element-service
+    }
+element-service =
+    element service {
+        attribute id { text },
+        attribute context { text },
+        attribute profile { text }
+    }
+element-license =
+    element license {
+        attribute uri { text }
+    }
+element-attribution = element attribution { text }
+element-logo =
+    element logo {
+        attribute uri { text }
+    }
+element-related =
+    element related {
+        attribute id { text },
+        attribute format { text },
+        attribute label { text }
+    }
+element-seeAlso =
+    element seeAlso {
+        attribute uri { text }
+    }
+element-within =
+    element within {
+        text | (
+         attribute id { text },
+         attribute type { text },
+         attribute label { text }
+         )
+    }
+element-sequence =
+    element sequence {
+        attribute id { text },
+        attribute label { text },
+        attribute viewingDirection { text },
+        attribute viewingHint { text },
+        attribute startCanvas { text },
+        # this should be an idref
+        element-canvas+
+    }
+element-canvas =
+    element canvas {
+        attribute id { text },
+        attribute label { text },
+        attribute height { text },
+        attribute width { text },
+        element-annotation+,
+        element-annotationList?
+    }
+element-annotation =
+    element annotation {
+        attribute motivation { text },
+        attribute on { text },
+        element-resource+
+    }
+element-annotationList =
+    element annotationList {
+        attribute id { text }
+    }
+element-resource =
+    element resource {
+        attribute id { text },
+        attribute type { text },
+        attribute format { text },
+        attribute height { text },
+        attribute width { text },
+        element-service
+    }
+element-range =
+    element range {
+        attribute id { text },
+        attribute label { text }?,
+        attribute viewingDirection { text }?,
+        
+        element-range*,
+        element-canvas*
+    }
+    
+element-layer =
+    element layer {
+        attribute id { text },
+        common-properties,
+        element otherContent { text }+
+    }
+
+}
